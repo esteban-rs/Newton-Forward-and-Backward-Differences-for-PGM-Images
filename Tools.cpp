@@ -104,7 +104,7 @@ double PGM::backward_table(int i, int n, vector <double> &row){
     return backward_table(i,n-1, row) - backward_table(i-1,n-1,row);
 }
 
-void PGM::forward_differece_by_cols(int npoints, vector <int> &fac){
+void PGM::forward_differece_by_rows(int npoints, vector <int> &fac){
     vector <int> num = {1, 1, -1, 2, -6, 24};
     
     for (int i = 0; i < rows; i++){
@@ -116,7 +116,7 @@ void PGM::forward_differece_by_cols(int npoints, vector <int> &fac){
     }
 }
 
-void PGM::forward_differece_by_rows(int npoints, vector <int> &fac){
+void PGM::forward_differece_by_cols(int npoints, vector <int> &fac){
     vector <int> num = {1, 1, -1, 2, -6, 24};
     
     vector <double> col; 
@@ -135,19 +135,19 @@ void PGM::forward_differece_by_rows(int npoints, vector <int> &fac){
     }  
 }
 
-void PGM::backward_differece_by_cols(int npoints, vector <int> &fac){
+void PGM::backward_differece_by_rows(int npoints, vector <int> &fac){
     vector <int> num = {1,-1, -1,-2, -6,-24};
     
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < (cols - npoints); j++){
             for (int k = 0; k < npoints-1; k++){
-                gx[i][j] += ((double)(num[k]/fac[k+1]))*backward_table(j+1,k+1, Image[i]);
+                gx[i][j] += (num[k]/fac[k+1])*backward_table(j,k+1, Image[i]);
             }
         }
     }
 }
 
-void PGM::backward_differece_by_rows(int npoints, vector <int> &fac){
+void PGM::backward_differece_by_cols(int npoints, vector <int> &fac){
     vector <int> num = {1,-1, -1,-2, -6,-24};
     
     vector <double> col; 
@@ -159,7 +159,7 @@ void PGM::backward_differece_by_rows(int npoints, vector <int> &fac){
                 col[r] = Image[r][j];
             }
             for (int k = 0; k < npoints-1; k++){
-                gx[i][j] += ((double)(num[k]/fac[k+1]))*backward_table(i+1,k+1, col);
+                gx[i][j] += (num[k]/fac[k+1])*backward_table(i,k+1, col);
             }
         }
     }  
